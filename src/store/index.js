@@ -2,12 +2,52 @@ import { createStore } from 'vuex'
 import LocalStorage from '@/modules/LocalStorage'
 
 const localStore = new LocalStorage('todoVue')
+// const localStore = LocalStorage('todoVue')
 
 export default createStore({
   state: {
-    todos: []
+    todos: [
+      { content: '123', done: false },
+      { content: '456', done: false },
+      { content: '789', done: false }
+    ]
   },
   getters: {
+    // get list id
+    list (state) {
+      return state.todos.map((todo, tId) => {
+        return {
+          tId,
+          todo
+        }
+      })
+    },
+    filterList: (state, getters) => (filter) => {
+      let status = null
+      switch (filter) {
+        // case 'all':
+        //   return getters.list
+        // case 'active':
+        //   return getters.list.filter((todo) => { return !todo.todo.done })
+        // case 'done':
+        //   return getters.list.filter((todo) => { return todo.todo.done })
+        // default:
+        //   return []
+        case 'all':
+          return getters.list
+        case 'active':
+          status = false
+          break
+        case 'done':
+          status = true
+          break
+      }
+      return getters.list.filter((todo) => { return todo.todo.done === status })
+    }
+    // filterList (state) {
+    //   return (filter) => {
+    //   }
+    // }
   },
   mutations: {
     setTodo (state, todos) {
@@ -27,6 +67,9 @@ export default createStore({
         tId: todos.length - 1,
         todos
       }
+      // return axios.post().then((result) => {
+      // }).catch(() => {
+      // })
     },
     readTodo ({ commit }) {
       // 1.read GET -> localStore.load()
