@@ -8,7 +8,7 @@ export default createStore({
   state: {
     todos: [
       { content: '123', done: false },
-      { content: '456', done: false },
+      { content: '456', done: true },
       { content: '789', done: false }
     ]
   },
