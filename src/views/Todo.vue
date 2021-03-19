@@ -2,9 +2,9 @@
   <div class="todo">
     <h1>This is an todo page</h1>
      <!-- replace替代自己的歷史記錄 -->
-    <router-link to="/todo" replace>all</router-link>｜
+    <router-link to="/todo" :class="{'active': defActive}" replace>all</router-link>｜
     <router-link to="/todo?filter=active" replace>active</router-link>｜
-    <router-link :to="{ path:'/todo', query:{ filter:'done' }}" replace>do</router-link>｜
+    <router-link :to="{ path:'/todo', query:{ filter:'done' }}" replace>do</router-link>
     <!-- <router-link :to="{ name:'Todo', query:{ filter:'done' }}">do</router-link>｜ -->
     <p>show: {{ filter }}</p>
     <p>{{ list }}</p>
@@ -16,7 +16,8 @@ export default {
   data () {
     return {
       // all, active, done
-      filter: 'all'
+      filter: 'all',
+      defActive: false
     }
   },
   computed: {
@@ -38,9 +39,23 @@ export default {
       // immediate進入馬上執行
       immediate: true,
       handler: function (route) {
+        (route.query.filter === undefined) ? this.defActive = true : this.defActive = false
         this.filter = route.query.filter || 'all'
       }
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.todo a {
+  text-decoration: none;
+  color: black;
+  font-weight: 400;
+  &.active,
+  &.router-link-exact-active:focus {
+    color: green;
+    font-weight: 700;
+  }
+}
+</style>
